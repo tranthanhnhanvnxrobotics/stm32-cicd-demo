@@ -1,0 +1,14 @@
+# CubeIDE files
+.cproject
+.mxproject
+.project
+.settings/
+CICD.ioc
+CICD/
+
+# Build output
+Debug/
+*.o
+*.d
+*.lst
+*.map

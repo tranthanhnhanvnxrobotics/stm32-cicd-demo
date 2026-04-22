@@ -1,11 +1,29 @@
 stages:
   - build
+  - test
+
+variables:
+  GCC_ARM_VERSION: "12.3.rel1"
 
 build_firmware:
   stage: build
-  image: gcc:latest
+  image: registry.gitlab.com/gitlab-org/embedded-development/arm-gcc:latest
+  # Hoặc dùng image phổ biến hơn:
+  # image: docker.io/bjorn3/arm-none-eabi:latest
+  before_script:
+    # Cài arm-none-eabi-gcc nếu dùng image ubuntu
+    - apt-get update -qq
+    - apt-get install -y -qq gcc-arm-none-eabi binutils-arm-none-eabi make
   script:
-    - make
+    - arm-none-eabi-gcc --version   # Kiểm tra version
+    - make all                       # Build project
   artifacts:
+    name: "$CI_COMMIT_SHORT_SHA"
     paths:
-      - Debug/
+      - Debug/*.elf
+      - Debug/*.hex
+      - Debug/*.bin
+    expire_in: 1 week
+  only:
+    - master
+    - merge_requests

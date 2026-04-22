@@ -1,0 +1,31 @@
+name: Build STM32 Firmware
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install ARM toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi make
+
+      - name: Check toolchain
+        run: arm-none-eabi-gcc --version
+
+      - name: Build firmware
+        run: make all
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware
+          path: |
+            Debug/*.elf
+            Debug/*.hex
+            Debug/*.bin

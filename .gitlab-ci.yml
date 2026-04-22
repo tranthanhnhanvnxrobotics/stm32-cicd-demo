@@ -1,0 +1,11 @@
+stages:
+  - build
+
+build_firmware:
+  stage: build
+  image: gcc:latest
+  script:
+    - make
+  artifacts:
+    paths:
+      - Debug/
